@@ -28,11 +28,16 @@ class SiteController extends Controller
 	 *  精彩推荐更多页
 	 */
 	public function actionRecommend (){
-		$model = new Problem();
-		$recommends =  $model->limit()->findAll();
+		$model = new Problem('search');
+		$criteria=new CDbCriteria();
+		
+ 		$pages = new CPagination($model->count($criteria));
+ 		$pages->pageSize = 3;
+ 		$recommends =  $model->limit()->page($pages->pageSize,$pages->currentPage)->findAll();
 		
 		$this->render('recommend',array(
-				'recommend' => $recommends
+				'recommend' => $recommends,
+				'pages' => $pages,
 				));
 	}
 	
@@ -41,10 +46,11 @@ class SiteController extends Controller
 	 */
 	public function actionAnswer(){
 		$model = new Problem();
+		
 		$answer = $model->limit()->findAll();
 		
 		$this->render('answer',array(
-				'answer' => $answer
+				'answer' => $answer,
 		));
 		
 	}

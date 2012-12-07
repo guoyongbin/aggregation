@@ -80,7 +80,7 @@ class Problem extends CActiveRecord
 					'group'=>'a.pid',
 					'condition'=>'t.status=1',
 					'order'=>'num DESC,id DESC',
-					'limit'=>'20'
+				//	'limit'=>'2'
 			),
 	);
 	}
@@ -143,6 +143,18 @@ class Problem extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>array(
+					'pageSize'=>3,
+			),
 		));
+		
+	}
+	
+	public function page($size = 2, $index = 0){
+		$this->getDbCriteria()->mergeWith(array(
+				'limit' => $size,
+				'offset' => $size * $index,
+		));
+		return $this;
 	}
 }
